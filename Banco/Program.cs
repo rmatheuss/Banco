@@ -1,11 +1,11 @@
 using Banco.Models;
 using Banco.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllers();
 
 var dbHost = builder.Configuration["DB_HOST"] ?? "localhost";
 var dbPort = builder.Configuration["DB_PORT"] ?? "1433";
@@ -18,13 +18,23 @@ var conString = $"Server={dbHost},{dbPort};Database={dbName};User Id={dbUser};Pa
 //add conexao com o banco
 builder.Services.AddDbContext<BancoDbContext>(options => options.UseSqlServer(conString));
 
+//add Swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Banco API",
+        Description = "API de Banco para gerenciar transações"
+    });
+});
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -37,6 +47,13 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Banco API v1");
+    c.RoutePrefix = string.Empty; // Deixa o Swagger na rota raiz ("/")
+});
 
 app.MapControllerRoute(
     name: "default",
