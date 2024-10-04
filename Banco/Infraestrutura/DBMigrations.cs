@@ -1,9 +1,8 @@
-﻿using Banco.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Banco.Services
+namespace Banco.Infraestrutura
 {
-    public static class DbService
+    public static class DBMigrations
     {
         public static void InitialMigration(this IApplicationBuilder app)
         {

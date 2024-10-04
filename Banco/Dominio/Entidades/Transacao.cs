@@ -1,4 +1,4 @@
-﻿namespace Banco.Models
+﻿namespace Banco.Dominio.Entidades
 {
     public class Transacao
     {

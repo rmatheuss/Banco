@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Banco.Dominio.Entidades;
+using Microsoft.EntityFrameworkCore;
 
-namespace Banco.Models
+namespace Banco.Infraestrutura
 {
     public class BancoDbContext : DbContext
     {

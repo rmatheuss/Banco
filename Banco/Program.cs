@@ -1,5 +1,8 @@
-using Banco.Models;
-using Banco.Services;
+using Banco.Dominio.Interfaces.Repositorios;
+using Banco.Dominio.Interfaces.Services;
+using Banco.Dominio.Services;
+using Banco.Infraestrutura;
+using Banco.Infraestrutura.Repositorios;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -17,6 +20,9 @@ var conString = $"Server={dbHost},{dbPort};Database={dbName};User Id={dbUser};Pa
 
 //add conexao com o banco
 builder.Services.AddDbContext<BancoDbContext>(options => options.UseSqlServer(conString));
+
+builder.Services.AddScoped<ITransacaoService, TransacaoService>();
+builder.Services.AddScoped<ITransacaoRepositorio, TransacaoRepositorio>();
 
 //add Swagger
 builder.Services.AddSwaggerGen(c =>
@@ -39,7 +45,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 //Inicializando migrations
-DbService.InitialMigration(app);
+DBMigrations.InitialMigration(app);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
